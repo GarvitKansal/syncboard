@@ -11,7 +11,12 @@ export function useBoardSync(boardId, token, user, onRemoteAction) {
   useEffect(() => {
     if (!boardId || !token) return;
 
-    const socketFactory = () => new SockJS('import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'/ws');
+    // Use VITE_WS_URL directly if set, or fall back to VITE_API_BASE_URL + '/ws', or localhost
+    const rawUrl = import.meta.env.VITE_WS_URL ||
+      (import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/ws` : 'http://localhost:8080/ws');
+
+    const socketFactory = () => new SockJS(rawUrl);
+
     const client = new Client({
       webSocketFactory: socketFactory,
       connectHeaders: {
