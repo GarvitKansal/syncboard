@@ -1,0 +1,17 @@
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.swp
+*.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Env & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
