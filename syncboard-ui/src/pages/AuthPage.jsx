@@ -16,7 +16,6 @@ export default function AuthPage() {
 
     const endpoint = isLogin ? '/api/v1/auth/login' : '/api/v1/auth/register';
 
-    // Send only email & password during login; include trimmed values
     const payload = isLogin
       ? {
           email: form.email.trim(),
@@ -29,7 +28,10 @@ export default function AuthPage() {
         };
 
     try {
-      const res = await fetch(`import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'${endpoint}`, {
+      // Evaluate environment variable with localhost fallback
+      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+      const res = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
