@@ -33,3 +33,6 @@ logging:
     root: INFO
     org.springframework.web: INFO
     com.syncboard: DEBUG
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000,https://syncboard-ui-krip.onrender.com}
