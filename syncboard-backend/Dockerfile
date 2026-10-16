@@ -1,22 +1,22 @@
 # Stage 1: Build JAR using Maven and Java 21
-FROM eclipse-temurin:21-jdk AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
-# Copy dependency files first for layer caching
+# Install maven directly
+RUN apk add --no-cache maven
+
+# Copy POM and download dependencies first for caching
 COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-RUN ./mvnw dependency:go-offline -B
+RUN mvn dependency:go-offline -B
 
-# Copy source code and package
+# Copy source code and build production package
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
-# Stage 2: Minimal Runtime image
+# Stage 2: Minimal Runtime Image
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Non-root user for security
 RUN addgroup -S syncgroup && adduser -S syncuser -G syncgroup
 USER syncuser
 
